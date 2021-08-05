@@ -1,0 +1,64 @@
+version: '3.7'
+services:
+
+    eureka-server:
+        image: abhi0112/rpm-eureka-server
+        ports:
+            - "8761:8761"
+        restart: always
+        networks:
+            - rpm-network
+
+
+    rpm-vendor-microservice:
+        image: abhi0112/rpm-vendor-microservice
+        ports:
+            - "8003:8003"
+        restart: always
+        depends_on:
+            - eureka-server
+        networks:
+            - rpm-network
+
+      
+
+    rpm-cart-microservice:
+        image: abhi0112/rpm-cart-microservice
+        ports:
+            - "8002:8002"
+        restart: always
+        depends_on:
+            - eureka-server
+            - rpm-vendor-microservice
+        networks:
+            - rpm-network
+
+      
+    rpm-product-microservice:
+        image: abhi0112/rpm-product-microservice
+        ports:
+            - "8001:8001"
+        restart: always
+        depends_on:
+            - eureka-server
+        networks:
+            - rpm-network
+     
+
+
+    rpm-api-gatway-auth:
+        image: abhi0112/rpm-api-gatway-auth
+        ports:
+            - "8008:8008"
+        restart: always
+        depends_on:
+            - eureka-server
+        networks:
+            - rpm-network
+
+  
+  
+  
+# Networks to be created to facilitate communication between containers
+networks:
+    rpm-network:
